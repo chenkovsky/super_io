@@ -68,6 +68,11 @@ module SuperIO
     to_io i.value, io, format
   end
 
+  @[AlwaysInline]
+  def from_io(t : Pointer(T).class, io : IO, format : IO::ByteFormat) forall T
+    pointerof(from_io T, io, format)
+  end
+
   def ptr_from_io(t : Pointer(T).class, io : IO, format : IO::ByteFormat) forall T
     size = from_io Int64, io, format
     capacity = yield size
