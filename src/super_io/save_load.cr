@@ -5,6 +5,10 @@ module SuperIO
         to_io f, format
       end
     end
+
+    def save(path : String, format = IO::ByteFormat::LittleEndian) : Void
+      to_disk(path, format)
+    end
   end
 
   module Load
@@ -12,6 +16,10 @@ module SuperIO
       File.open(path, "rb") do |f|
         self.from_io f, format
       end
+    end
+
+    def load(path : String, format = IO::ByteFormat::LittleEndian) : self
+      from_disk(path, format)
     end
   end
 end
