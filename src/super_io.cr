@@ -76,6 +76,14 @@ module SuperIO
     return ret, size, capacity
   end
 
+  def ptr_from_io(t : Pointer(T).class, io : IO, format : IO::ByteFormat) forall T
+    size = from_io Int64, io, format
+    capacity = size
+    ret = t.malloc(capacity)
+    (0...size).each { |i| ret[i] = from_io T, io, format }
+    return ret, size
+  end
+
   def ptr_to_io(ptr : Pointer(T), size : Int, io : IO, format : IO::ByteFormat) forall T
     to_io size.to_i64, io, format
     (0...size).each do |idx|
