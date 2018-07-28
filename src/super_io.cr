@@ -121,9 +121,21 @@ module SuperIO
     t.from_io io, format
   end
 
+  @[AlwaysInline]
   def to_io(s : String, io : IO, format : IO::ByteFormat)
     io.print s
     io.write_byte 0_u8
+  end
+
+  @[AlwaysInline]
+  def to_io(s : Bool, io : IO, format : IO::ByteFormat)
+    (s ? 1_u8 : 0_u8).to_io io, format
+  end
+
+  @[AlwaysInline]
+  def from_io(t : Bool.class, io : IO, format : IO::ByteFormat)
+    b = UInt8.from_io io, format
+    b != 0_u8
   end
 
   def from_io(t : String.class, io : IO, format : IO::ByteFormat, bytes = Array(UInt8).new)
