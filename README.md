@@ -66,7 +66,7 @@ require "super_io"
   end
 
   class Base
-    SuperIO.reflect_io(Base)
+    SuperIO.reflect_io
   end
 
   class Sub1 < Base

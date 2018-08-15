@@ -41,8 +41,9 @@ module SuperIO
     end
   end
 
-  macro reflect_io(base)
-    SuperIOLoader = {} of String => ((IO, IO::ByteFormat) -> {{base}})
+  macro reflect_io
+    alias SuperIOReflectBase =  self
+    SuperIOLoader = {} of String => ((IO, IO::ByteFormat) -> self)
 
     def rto_io(io : IO, format : IO::ByteFormat)
       SuperIO.to_io(self.class.name, io, format)
@@ -56,7 +57,7 @@ module SuperIO
     # 用于反射
     macro inherited
       SuperIOLoader["\{{@type.name}}"] = ->(io : IO, format : IO::ByteFormat){
-        self.from_io(io, format).as({{base}})
+        self.from_io(io, format).as(SuperIOReflectBase)
       }
     end
   end
