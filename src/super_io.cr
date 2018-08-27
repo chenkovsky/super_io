@@ -128,6 +128,11 @@ module SuperIO
   end
 
   @[AlwaysInline]
+  def to_io(r : Regex, io : IO, format : IO::ByteFormat)
+    to_io r.to_s, io, format
+  end
+
+  @[AlwaysInline]
   def to_io(s : Bool, io : IO, format : IO::ByteFormat)
     (s ? 1_u8 : 0_u8).to_io io, format
   end
@@ -136,6 +141,12 @@ module SuperIO
   def from_io(t : Bool.class, io : IO, format : IO::ByteFormat)
     b = UInt8.from_io io, format
     b != 0_u8
+  end
+
+  @[AlwaysInline]
+  def from_io(t : Regex.class, io : IO, format : IO::ByteFormat)
+    str = from_io String, io, format
+    return Regex.new str
   end
 
   def from_io(t : String.class, io : IO, format : IO::ByteFormat, bytes = Array(UInt8).new)

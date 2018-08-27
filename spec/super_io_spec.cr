@@ -70,4 +70,16 @@ describe SuperIO do
     arr2.should eq(arr)
     arr_2.should eq(arr_)
   end
+
+  it "regex" do
+    re = /A+/i
+    File.open("tmp.bin", "wb") do |io|
+      SuperIO.to_io re, io, IO::ByteFormat::LittleEndian
+    end
+    re = File.open("tmp.bin", "rb") do |io|
+      a1 = SuperIO.from_io Regex, io, IO::ByteFormat::LittleEndian
+    end
+    re.match("a").nil?.should eq(false)
+    re.match("b").nil?.should eq(true)
+  end
 end
